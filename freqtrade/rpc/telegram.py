@@ -222,7 +222,8 @@ class Telegram(RPCHandler):
             CommandHandler('health', self._health),
             CommandHandler('help', self._help),
             CommandHandler('version', self._version),
-            CommandHandler('marketdir', self._changemarketdir)
+            CommandHandler('marketdir', self._changemarketdir),
+            CommandHandler('start_trail', self._start_trail)
         ]
         callbacks = [
             CallbackQueryHandler(self._status_table, pattern='update_status_table'),
@@ -1822,3 +1823,17 @@ class Telegram(RPCHandler):
         else:
             raise RPCException("Invalid usage of command /marketdir. \n"
                                "Usage: */marketdir [short |  long | even | none]*")
+
+    @authorized_only
+    async def _start_trail(self, update: Update, context: CallbackContext) -> None:
+        """
+        Handler for /start_trail.
+        """
+
+        if len(context.args) >= 1:
+            offset_points = context.args[0]
+            await self._send_msg("Successfully started a trailing position"
+                                 f" with a {offset_points}-point offset.")
+        else:
+            raise RPCException("Invalid usage of command /start_trail. \n"
+                               "Usage: */marketdir [offset_points]*")

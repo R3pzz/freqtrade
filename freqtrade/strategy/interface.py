@@ -124,6 +124,9 @@ class IStrategy(ABC, HyperStrategyMixin):
     # A self set parameter that represents the market direction. filled from configuration
     market_direction: MarketDirection = MarketDirection.NONE
 
+    # Murzila: Orders placed from telegram should be stored by rpc and then processed by the strategy
+    pending_rpc_orders: List = []
+        
     def __init__(self, config: Config) -> None:
         self.config = config
         # Dict to determine if analysis is necessary
